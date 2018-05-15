@@ -1,0 +1,239 @@
+/*
+
+     function showModal(Updateform){
+     //MSK-00115
+     $('#modalViewform').modal('hide');
+     var info = $('#example1').DataTable().page.info();
+     var currentPage= (info.page + 1);
+
+     var Id = $(Updateform).data("id");
+     var path = "../";
+
+     var xhttp = new XMLHttpRequest();//MSK-00116-Ajax Start
+     xhttp.onreadystatechange = function() {
+     if (this.readyState == 4 && this.status == 200) {
+
+     var myArray1 = eval( xhttp.responseText );
+     var imagePath = path.concat(myArray1[7]);
+
+     //MSK-00118
+     document.getElementById("id1").value =myArray1[0];
+     document.getElementById("full_name1").value =myArray1[1];
+     document.getElementById("i_name1").value =myArray1[2];
+     document.getElementById("address1").value =myArray1[3];
+     document.getElementById("gender1").value =myArray1[4];
+     document.getElementById("phone1").value =myArray1[5];
+     document.getElementById("email1").value =myArray1[6];
+     document.getElementById("output1").src ='../'+myArray1[7];
+     document.getElementById("c_page").value =currentPage;
+
+     var telformat = /\d{3}[\-]\d{3}[\-]\d{4}$/;
+     var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+     $("#phone1" ).keydown(function(){//MSK-00119-phone
+
+     var beforeValue = $(this);// this is the value before the keypress
+
+     setTimeout(function() {
+
+     var afterValue = beforeValue.val();// this is the value after the keypress
+     var mom = $('#divPhoneUpdate');
+
+     if (telformat.test(afterValue) == false){
+     //MSK-00120-phone
+     $("#btnSubmit1").attr("disabled", true);
+     mom.removeClass('has-success has-feedback');
+     mom.children("span").remove();
+
+     mom.addClass('has-error has-feedback');
+     mom.append('<span id="spanPhoneUpdate" class="glyphicon glyphicon-remove form-control-feedback msk-set-color-tooltip" data-toggle="tooltip" title="Enter valid phone number" ></span>');
+
+     }else{
+     //MSK-00121-phone
+     $("#btnSubmit1").attr("disabled", false);
+     mom.removeClass('has-error has-feedback');
+     mom.children("span").remove();
+
+     mom.addClass('has-success has-feedback');
+     mom.append('<span id="spanPhoneUpdate" class="glyphicon glyphicon-ok form-control-feedback" ></span>');
+     }
+
+     }, 0);
+
+
+     });
+
+     $("#email1" ).keydown(function(){//MSK-00119-email
+
+     var beforeValue = $(this);// this is the value before the keypress
+
+     setTimeout(function() {
+
+     var afterValue = beforeValue.val();// this is the value after the keypress
+     var mom = $('#divEmailUpdate');
+
+     if (mailformat.test(afterValue) == false){
+     //MSK-00120-email
+     $("#btnSubmit1").attr("disabled", true);
+     mom.removeClass('has-success has-feedback');
+     mom.children("span").remove();
+
+     mom.addClass('has-error has-feedback');
+     mom.append('<span id="spanEmailUpdate" class="glyphicon glyphicon-remove form-control-feedback msk-set-color-tooltip" data-toggle="tooltip" title="Enter valid email address" ></span>');
+
+     }else{
+     //MSK-00121-email
+     $("#btnSubmit1").attr("disabled", false);
+     mom.removeClass('has-error has-feedback');
+     mom.children("span").remove();
+
+     mom.addClass('has-success has-feedback');
+     mom.append('<span id="spanEmailUpdate" class="glyphicon glyphicon-ok form-control-feedback" ></span>');
+     }
+
+     }, 0);
+
+
+     });
+
+     $('[type="file"]').change(function () {
+     //MSK-00119-photo
+     var fileSize = this.files[0].size;
+     var maxSize = 1000000;// bytes
+     var ext = $('#fileToUpload1').val().split('.').pop().toLowerCase();
+
+     if($.inArray(ext, ['png','jpg','jpeg']) == -1) {
+     //MSK-00120-photo
+
+     output1.src="../uploads/error.png";
+
+     $("#btnSubmit1").attr("disabled", true);
+     $('#divPhotoUpdate1').addClass('has-error has-feedback msk-col-md-4');
+     $('#divPhotoUpdate1').append('<span id="spanPhoto" class="glyphicon glyphicon-remove form-control-feedback msk-set-width-tooltip" data-toggle="tooltip" title="This file type is not allowed" ></span>');
+
+     }else{
+
+     if(fileSize > maxSize) {
+     //MSK-00121-photo
+     output1.src="../uploads/error.png";
+
+     $("#btnSubmit1").attr("disabled", true);
+     $('#divPhotoUpdate1').addClass('has-error has-feedback msk-col-md-4');
+     $('#divPhotoUpdate1').append('<span id="spanPhoto" class="glyphicon glyphicon-remove form-control-feedback msk-set-width-tooltip" data-toggle="tooltip" title="The image size is too large" ></span>');
+
+     }else{
+     //MSK-00122-photo
+     output1.src = URL.createObjectURL(this.files[0]);
+
+     $("#btnSubmit1").attr("disabled", false);
+     $('#divPhotoUpdate1').removeClass('has-error has-feedback msk-col-md-4');
+     $('#spanPhoto').remove();
+
+     }
+     }
+     });
+     }
+
+     };
+
+     xhttp.open("GET", "../model/get_teacher.php?id=" + Id , true);//MSK-00116-Ajax End
+     xhttp.send();
+
+     };
+
+     $("#form2").submit(function(e){
+     //MSK-000098-form2 submit
+
+     var Id1 = document.getElementById('id1').value;
+     var full_name = document.getElementById("full_name1").value;
+     var i_name = document.getElementById("i_name1").value;
+     var address = document.getElementById("address1").value;
+     var gender = document.getElementById("gender1").value;
+     var phone = document.getElementById("phone1").value;
+     var email = document.getElementById("email1").value;
+     var photo = document.getElementById("output1").src;
+
+     if(full_name == ''){
+     //MSK-00123-full_name
+     $('#divFullNameUpdate').addClass('has-error has-feedback');
+     $('#divFullNameUpdate').append('<span class="glyphicon glyphicon-remove form-control-feedback msk-set-width-tooltip" data-toggle="tooltip" title="The full name is required" ></span>');
+
+     $("#full_name1").keydown(function(){
+     //MSK-00124-full_name
+     $("#btnSubmit1").attr("disabled",false);
+     $('#divFullNameUpdate').removeClass('has-error has-feedback');
+     $('#divFullNameUpdate').children("span").remove();
+
+     });
+
+     }else{
+
+     }
+
+     if(i_name == ''){
+     //MSK-00123-i_name
+     $('#divINameUpdate').addClass('has-error has-feedback');
+     $('#divINameUpdate').append('<span class="glyphicon glyphicon-remove form-control-feedback msk-set-width-tooltip" data-toggle="tooltip" title="The initials name is required" ></span>');
+
+     $("#i_name1").keydown(function(){
+     //MSK-00124-i_name
+     $("#btnSubmit1").attr("disabled",false);
+     $('#divINameUpdate').removeClass('has-error has-feedback');
+     $('#divINameUpdate').children("span").remove();
+
+     });
+
+     }else{
+
+     }
+
+     if(address == ''){
+     //MSK-00123-address
+     $('#divAddressUpdate').addClass('has-error has-feedback');
+     $('#divAddressUpdate').append('<span class="glyphicon glyphicon-remove form-control-feedback msk-set-width-tooltip" data-toggle="tooltip" title="The address is required" ></span>');
+
+     $("#address1").keydown(function(){
+     //MSK-00124-address
+     $("#btnSubmit1").attr("disabled",false);
+     $('#divAddressUpdate').removeClass('has-error has-feedback');
+     $('#divAddressUpdate').children("span").remove();
+
+     });
+
+     }else{
+
+     }
+
+     var telformat = /\d{3}[\-]\d{3}[\-]\d{4}$/;
+     var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+     if(full_name == '' || i_name == '' || address == '' || phone == '' || email == '' || gname == '' || gaddress == '' || gphone == '' || gemail == '' ||telformat.test(phone) == false || mailformat.test(email) == false ){
+     //MSK-000098- form2 validation failed
+     $("#btnSubmit1").attr("disabled", true);
+     e.preventDefault();
+     return false;
+
+     }else{
+     $("#btnSubmit1").attr("disabled", false);
+     //return true;
+     }
+     });
+
+     //MSK-000125
+     function cTablePage(page){
+
+     var currentPage1 = (page-1)*10;
+
+     $(function(){
+     $("#example1").DataTable({
+     "displayStart": currentPage1,
+     "bDestroy": true
+     });
+
+     });
+
+     window.scrollTo(0,document.body.scrollHeight);
+
+     };
+
+*/
