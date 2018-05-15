@@ -17,7 +17,6 @@ class OperatorMiddleWare
     public function handle($request, Closure $next)
     {
         if (Sentinel::check() && Sentinel::getUser()->roles()->first()->slug == 'operator')
-
             return $next($request);
         else
             return redirect('/not-allowed');

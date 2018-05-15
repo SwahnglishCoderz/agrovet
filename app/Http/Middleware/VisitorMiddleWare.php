@@ -28,6 +28,7 @@ class VisitorMiddleWare
             {
                 return redirect('/operator');
             }
+            
         }
     }
 }

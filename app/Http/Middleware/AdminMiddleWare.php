@@ -17,7 +17,6 @@ class AdminMiddleWare
     public function handle($request, Closure $next)
     {
         if (Sentinel::check() && Sentinel::getUser()->roles()->first()->slug == 'admin')
-
             return $next($request);
         else
             return redirect('/not-allowed');
